@@ -3,13 +3,11 @@ package com.example.demo.controllers;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.service.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "*") // TODO change me
 public class UserRestController {
 
     private UserService userService;

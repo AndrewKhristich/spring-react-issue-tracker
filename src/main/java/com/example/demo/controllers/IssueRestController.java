@@ -7,7 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/issues")
+@RequestMapping(value = "/api/issues")
+@CrossOrigin(origins = "*") // TODO change me
 public class IssueRestController {
 
     private IssueService issueService;
