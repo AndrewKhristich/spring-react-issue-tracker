@@ -36,7 +36,7 @@ public class Issue {
     private Date publishedAt;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "author")
+    @JoinColumn(name = "author_id")
     @JsonBackReference
     private User user;
 

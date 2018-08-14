@@ -1,20 +1,46 @@
 package com.example.demo.controllers;
 
+import com.example.demo.dto.JwtAuthenticationResponse;
+import com.example.demo.dto.SignInRequest;
 import com.example.demo.model.User;
+import com.example.demo.security.CurrentUser;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.security.UserPrincipal;
+import com.example.demo.service.UserService;
 import com.example.demo.utils.SecurityUtil;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = "/api/auth")
 @CrossOrigin(origins = "*") // TODO change me
 public class AuthRestController {
 
+    private UserService service;
+    private AuthenticationManager authenticationManager;
+    private JwtTokenProvider tokenProvider;
+
+    public AuthRestController(UserService service, AuthenticationManager authenticationManager, JwtTokenProvider tokenProvider) {
+        this.service = service;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
+    }
+
     @GetMapping(value = "/check")
-    public User checkAuth() {
-        return SecurityUtil.getUserFromSession();
+    public UserPrincipal checkAuth(@CurrentUser UserPrincipal currentUser) {
+        return currentUser;
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticate(@RequestBody SignInRequest signInRequest) {
+        String jwt = service.authenticate(
+                signInRequest.getUsername(), signInRequest.getPassword()
+        );
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dto.CommentDTO;
+import com.example.demo.dto.CommentRequest;
 import com.example.demo.model.Comment;
 import com.example.demo.service.IssueService;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +24,7 @@ public class CommentRestController {
     }
 
     @PostMapping
-    public void saveComment(@RequestBody CommentDTO dto) {
+    public void saveComment(@RequestBody CommentRequest dto) {
         issueService.saveCommentToIssue(dto.getIssueId(), new Comment(dto.getDescription(), dto.getStatus()));
     }
 }

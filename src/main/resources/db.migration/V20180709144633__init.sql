@@ -16,7 +16,7 @@ create table user_roles
     constraint user_roles_pkey
     primary key,
   user_role varchar(255) not null,
-  username  varchar(255) not null
+  user_id  bigint not null
     constraint fkcdp2dxqcsdh6rnh6o64rgtcir
     references users
 );
@@ -30,7 +30,7 @@ create table issues
   issue_name   varchar(255),
   publish_date timestamp,
   status       varchar(255),
-  author       varchar(255)
+  author_id    bigint
     constraint fk4ntdml4qaeo21o666tm756cbf
     references users
 );

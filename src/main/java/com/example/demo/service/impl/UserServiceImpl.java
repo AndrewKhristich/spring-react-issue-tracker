@@ -1,12 +1,12 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.UserAlreadyExistsException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.security.JwtTokenProvider;
+import com.example.demo.security.UserPrincipal;
 import com.example.demo.service.UserService;
 import com.example.demo.utils.HibernateUtils;
-import com.example.demo.utils.SecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,31 +30,29 @@ public class UserServiceImpl implements UserService {
     private UserRepository repo;
     private PasswordEncoder encoder;
     private AuthenticationManager authManager;
+    private JwtTokenProvider tokenProvider;
 
     @Autowired
-    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder, AuthenticationManager authManager) {
+    public UserServiceImpl(UserRepository repo, PasswordEncoder encoder, AuthenticationManager authManager, JwtTokenProvider tokenProvider) {
         this.repo = repo;
         this.encoder = encoder;
         this.authManager = authManager;
+        this.tokenProvider = tokenProvider;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        try {
-            User userByName = repo.findByUsername(username).get();
-            HibernateUtils.initialize(userByName.getAuthorities());
-            return userByName;
-        } catch (UsernameNotFoundException e){
-            LOG.error(e.getMessage());
-        }
-        return null;
+        User userByName = repo.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("user with name " + username + "was not fount"));
+        HibernateUtils.initialize(userByName.getAuthorities());
+        return UserPrincipal.create(userByName);
     }
 
     @Override
-    public void authenticate(String username, String password) {
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(username, password);
-        Authentication authentication = authManager.authenticate(auth);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+    public String authenticate(String username, String password) {
+        Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        SecurityContextHolder.getContext().setAuthentication(auth);
+        return tokenProvider.generateToken(auth);
     }
 
     @Override
@@ -69,6 +67,6 @@ public class UserServiceImpl implements UserService {
         User user = repo.findById(userId).orElseThrow(
                 () -> new ResourceNotFoundException("User", "id", userId)
         );
-        return user;
+        return UserPrincipal.create(user);
     }
 }

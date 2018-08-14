@@ -1,8 +1,7 @@
 package com.example.demo.controllers;
 
-import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.SignInRequest;
 import com.example.demo.service.UserService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,13 +15,8 @@ public class UserRestController {
         this.userService = userService;
     }
 
-    @PostMapping("/authenticate")
-    public void authenticate(@RequestBody UserDTO userDTO) {
-        userService.authenticate(userDTO.getUsername(), userDTO.getPassword());
-    }
-
     @PostMapping("/")
-    public void saveUser(@RequestBody UserDTO dto) {
+    public void saveUser(@RequestBody SignInRequest dto) {
         userService.saveUser(dto.getUsername(), dto.getPassword());
         userService.authenticate(dto.getUsername(), dto.getPassword());
     }
