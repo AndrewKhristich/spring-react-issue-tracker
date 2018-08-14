@@ -1,8 +1,8 @@
 create table users
 (
-  username                varchar(20)  not null
-    constraint users_pkey
-    primary key,
+  id                      bigint constraint users_pkey
+  primary key,
+  username                varchar(20) not null unique,
   non_expired             boolean not null default true,
   non_locked              boolean not null default true,
   credentials_non_expired boolean not null default true,

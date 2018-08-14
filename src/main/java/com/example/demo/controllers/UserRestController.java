@@ -17,9 +17,14 @@ public class UserRestController {
     }
 
     @PostMapping("/authenticate")
-    @PreAuthorize("isAnonymous()")
     public void authenticate(@RequestBody UserDTO userDTO) {
         userService.authenticate(userDTO.getUsername(), userDTO.getPassword());
+    }
+
+    @PostMapping("/")
+    public void saveUser(@RequestBody UserDTO dto) {
+        userService.saveUser(dto.getUsername(), dto.getPassword());
+        userService.authenticate(dto.getUsername(), dto.getPassword());
     }
 
 }

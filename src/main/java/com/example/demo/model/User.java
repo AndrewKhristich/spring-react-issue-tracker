@@ -16,10 +16,15 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "users", schema = "public", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"username"}),
+})
 public class User implements UserDetails, Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @Column(name = "username", unique = true)
     @NotNull
     @Size(min = 1, max = 15)
@@ -48,14 +53,14 @@ public class User implements UserDetails, Serializable {
     private boolean enabled;
 
     @OneToMany(cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY,
+            fetch = FetchType.LAZY,
             mappedBy = "user")
     @JsonManagedReference
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<UserRole> authorities = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL,
-//            fetch = FetchType.LAZY,
+            fetch = FetchType.LAZY,
             mappedBy = "user")
     @JsonManagedReference
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

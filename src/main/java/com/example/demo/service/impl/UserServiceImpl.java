@@ -1,5 +1,6 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.UserAlreadyExistsException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         try {
-            User userByName = repo.findById(username).get();
+            User userByName = repo.findByUsername(username).get();
             HibernateUtils.initialize(userByName.getAuthorities());
             return userByName;
         } catch (UsernameNotFoundException e){
@@ -58,8 +59,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(String username, String password) {
-        repo.findById(username).orElseThrow(() -> new UsernameNotFoundException("User with name '" + username + "' already exists"));
+        repo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User with name '" + username + "' already exists"));
         String encodedPass = encoder.encode(password);
         repo.save(new User(username, encodedPass));
+    }
+
+    @Override
+    public UserDetails loadUserById(Long userId) {
+        User user = repo.findById(userId).orElseThrow(
+                () -> new ResourceNotFoundException("User", "id", userId)
+        );
+        return user;
     }
 }
