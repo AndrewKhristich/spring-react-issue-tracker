@@ -20,8 +20,12 @@ class MainHeader extends Component {
     }
 
     componentDidMount() {
+        if(!localStorage.getItem("accessToken")) {
+            console.log("no tocken");
+        } else { console.log("tocken : " + localStorage.getItem("accessToken")) }
+
         axios.get("http://localhost:8080/api/auth/check").then(res => {
-            this.setState({name: res.data.username, logged: true}); console.log("user : " + res.data.username)
+            this.setState({name: res.data.username}); console.log("user : " + res.data.username)
         }, err => {console.log(err.message)});
     }
 
