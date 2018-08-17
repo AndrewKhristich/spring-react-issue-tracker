@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'
+import { Redirect } from 'react-router'
 import '../App.css';
 import SingleIssue from './component/issue/SingleIssue';
 import PageButtons from './component/PageButtons';
@@ -24,12 +25,18 @@ class Main extends Component {
         this.handleLast = this.handleLast.bind(this);
         this.handleNext = this.handleNext.bind(this);
         this.handlePrev = this.handlePrev.bind(this);
+        this.handleLogout = this.handleLogout.bind(this);
     }
 
     componentDidMount() {
         var pageNum = this.state.page.pageNumber;
         var pageSize = this.state.page.pageSize;
         this.updatePage(pageNum, pageSize);
+    }
+
+    handleLogout() {
+        localStorage.removeItem("accessToken");
+        this.props.history.push("/login");
     }
 
     handleNext() {
@@ -103,6 +110,7 @@ class Main extends Component {
                                  prev={this.handlePrev}
                                  last={this.handleLast}/>
                 </div>
+                <button onClick={this.handleLogout}>Logout</button>
             </div>
         );
     }

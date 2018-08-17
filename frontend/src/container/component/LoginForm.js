@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from 'axios'
+import { Route, Redirect } from 'react-router'
 
 class LoginForm extends Component {
     constructor(pros) {
@@ -18,11 +19,13 @@ class LoginForm extends Component {
     }
 
     handleSubmit(event) {
-        axios.post("http://localhost:8080/api/auth/signin", {username: this.state.username, password: this.state.password})
+        axios.post("http://localhost:8080/api/auth/signin", {username: "user1", password: "pass1"})
             .then(res => {
                 this.setState({logged: true, logErr: false});
                 localStorage.setItem("accessToken", res.data.accessToken);
-                }, err => {
+                localStorage.setItem("logged", true);
+                this.props.history.push("/")
+            }, err => {
                 this.setState({logged: false, logErr: true}); console.log("error" + " " + this.state.username);
             });
     }

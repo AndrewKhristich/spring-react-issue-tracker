@@ -15,18 +15,30 @@ class MainHeader extends Component {
         super(props);
         this.state = {
             name: '',
-            logged: false
+            logged: localStorage.getItem("logged")
         };
     }
 
     componentDidMount() {
-        if(!localStorage.getItem("accessToken")) {
-            console.log("no tocken");
-        } else { console.log("tocken : " + localStorage.getItem("accessToken")) }
 
-        axios.get("http://localhost:8080/api/auth/check").then(res => {
-            this.setState({name: res.data.username}); console.log("user : " + res.data.username)
-        }, err => {console.log(err.message)});
+        if (localStorage.getItem("accessToken")) {
+            let config = {
+                headers: {'Authorization': "Bearer " + localStorage.getItem("accessToken")}
+            };
+            axios.get("http://localhost:8080/api/auth/check", config).then(res => {
+                console.log("user : " + res.data.username);
+                this.setState({
+                    logged: true,
+                    name: res.data.username
+                });
+            }, err => {console.log(err.message)});
+        } else {
+            this.setState({
+                logged: false,
+                name: null
+            })
+        }
+
     }
 
     render() {
