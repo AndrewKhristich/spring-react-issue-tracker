@@ -1,12 +1,13 @@
 package com.example.demo.config;
 
-import com.example.demo.model.User;
-import com.example.demo.utils.SecurityUtil;
+import com.example.demo.security.UserPrincipal;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.Optional;
 
@@ -24,14 +25,16 @@ class SpringSecurityAuditAwareImpl implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
-        Authentication auth = SecurityUtil.getAuth();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (SecurityUtil.isAuthEmpty(auth)) {
+        if (authentication == null ||
+                !authentication.isAuthenticated() ||
+                authentication instanceof AnonymousAuthenticationToken) {
             return Optional.empty();
         }
 
-        User principal = (User) auth.getPrincipal();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-        return Optional.ofNullable(principal.getId());
+        return Optional.ofNullable(userPrincipal.getId());
     }
 }

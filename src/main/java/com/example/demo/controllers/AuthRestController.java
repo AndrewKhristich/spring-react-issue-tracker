@@ -2,17 +2,12 @@ package com.example.demo.controllers;
 
 import com.example.demo.dto.JwtAuthenticationResponse;
 import com.example.demo.dto.SignInRequest;
-import com.example.demo.model.User;
 import com.example.demo.security.CurrentUser;
 import com.example.demo.security.JwtTokenProvider;
 import com.example.demo.security.UserPrincipal;
 import com.example.demo.service.UserService;
-import com.example.demo.utils.SecurityUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
