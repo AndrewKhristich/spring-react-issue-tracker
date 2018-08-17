@@ -5,6 +5,7 @@ import com.example.demo.model.Issue;
 import com.example.demo.model.User;
 import com.example.demo.repository.CommentRepository;
 import com.example.demo.repository.IssueRepository;
+import com.example.demo.security.UserPrincipal;
 import com.example.demo.service.IssueService;
 import com.example.demo.utils.HibernateUtils;
 import com.example.demo.utils.SecurityUtil;
@@ -40,15 +41,15 @@ public class IssueServiceImpl implements IssueService {
 
     @Override
     public void saveIssue(@Valid Issue issue) {
-        User userFromSession = SecurityUtil.getUserFromSession();
-        issue.setUser(userFromSession);
+//        User userFromSession = SecurityUtil.getUserFromSession();
+//        issue.setUser(userFromSession);
         repository.save(issue);
     }
 
     @Override
     public Page<Issue> findAllOfCurrentUser(Integer pageNum, Integer pageSize) {
-        User userFromSession = SecurityUtil.getUserFromSession();
-        return repository.findByUser(userFromSession, PageRequest.of(pageNum, pageSize));
+        UserPrincipal userFromSession = SecurityUtil.getUserFromSession();
+        return repository.findByUser(userFromSession.getId(), PageRequest.of(pageNum, pageSize));
     }
 
     @Override

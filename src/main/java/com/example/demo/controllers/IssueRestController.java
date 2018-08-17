@@ -1,6 +1,9 @@
 package com.example.demo.controllers;
 
 import com.example.demo.model.Issue;
+import com.example.demo.model.User;
+import com.example.demo.security.CurrentUser;
+import com.example.demo.security.UserPrincipal;
 import com.example.demo.service.IssueService;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +25,7 @@ public class IssueRestController {
         return issueService.findAll(pageNum, pageSize);
     }
 
-    @GetMapping(value = "/myissues", params = {"pageNum", "pageSize"})
+    @GetMapping(value = "/myissues")
     public Page<Issue> findIssuesOfCurrentUser(@RequestParam(required = false, defaultValue = "0") Integer pageNum,
                                                @RequestParam(required = false, defaultValue = "20") Integer pageSize) {
         return issueService.findAllOfCurrentUser(pageNum, pageSize);
@@ -32,4 +35,6 @@ public class IssueRestController {
     public Issue findIssueById(@PathVariable(required = true) Long id) {
         return issueService.findById(id);
     }
+
+
 }

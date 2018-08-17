@@ -1,6 +1,7 @@
 package com.example.demo.utils;
 
 import com.example.demo.model.User;
+import com.example.demo.security.UserPrincipal;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -33,11 +34,11 @@ public class SecurityUtil {
         SecurityContextHolder.getContext().setAuthentication(null);
     }
 
-    static public User getUserFromSession() {
+    static public UserPrincipal getUserFromSession() {
         if (!isAuthenticated()) {
             throw new AuthenticationServiceException("User is Anonymous");
         }
-        return (User) getAuthentication().getPrincipal();
+        return (UserPrincipal) getAuthentication().getPrincipal();
     }
 
     private static Authentication getAuthentication() {
