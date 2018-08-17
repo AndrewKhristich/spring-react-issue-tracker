@@ -10,13 +10,13 @@ class SingleIssue extends Component {
         var status = this.props.issue.status;
 
         return(
-            <div className="issue-div" >
+            <div className="issue-div col-sm-7">
                 <div>
                     <span className={status==='Resolved' ? "glyphicon glyphicon-ok" : "glyphicon glyphicon-remove"}/>
                 </div>
                 <div>
-                    <label>{this.props.issue.issueName}</label><br/>
-                    <label>{this.props.issue.publishedAt}</label>
+                    <label className="issue-name">{this.props.issue.issueName}</label><br/>
+                    <label className="issue-date">{this.props.issue.publishedAt}</label>
                 </div>
             </div>
         )

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-import MainHeader from "./container/MainHeader"
+import App from "./App";
 
-ReactDOM.render(<MainHeader />, document.getElementById('main-header'));
+ReactDOM.render(<App />, document.getElementById('main-header'));
 
 registerServiceWorker();

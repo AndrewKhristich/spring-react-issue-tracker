@@ -6,12 +6,21 @@ body {
 h1, h2, p, ul, li {
   font-family: sans-serif;
 }
+.logout-div{
+  float: right;
+}
+.logout-div span {
+  font-size: 200%;
+  margin-right: 20px;
+}
 ul.header li {
   display: inline;
   list-style-type: none;
   margin: 0;
 }
 ul.header {
+  display: inline-block;
+  width: fit-content;
   background-color: #111;
   padding: 0;
 }
